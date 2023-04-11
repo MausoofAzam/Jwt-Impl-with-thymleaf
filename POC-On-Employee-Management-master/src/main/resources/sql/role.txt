@@ -1,0 +1,8 @@
+INSERT INTO ROLE (ROLE_ID, NAME) VALUES ('101', 'ROLE_USER');
+INSERT INTO ROLE (ROLE_ID, NAME) VALUES ('102', 'ROLE_ADMIN');
+INSERT INTO ROLE (ROLE_ID, NAME) VALUES ('103', 'ROLE_SUPERADMIN');
+
+
+
+<input id="txtSearch" type="text" name="keyword">
+<button type ="submit">Go</button>
