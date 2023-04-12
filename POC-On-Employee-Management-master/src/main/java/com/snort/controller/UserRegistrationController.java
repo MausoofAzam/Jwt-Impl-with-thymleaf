@@ -33,16 +33,16 @@ public class UserRegistrationController {
 	
 	@PostMapping 
 	public String registerUserAccount(@ModelAttribute("user") UserRegistrationDto registrationDto, Model model) {
-		String error = "";
-		try {
+//		String error = "";
+//		try {
 			userService.save(registrationDto);
 			return "redirect:/registration?success";
-		} catch (Exception e) {
+	/*	} catch (Exception e) {
 			error = "Email already exists!";
 			System.out.println(error);
 			model.addAttribute("error",error);
 			return "redirect:/registration?error";
-		}
+		}*/
 		
 	}
 }

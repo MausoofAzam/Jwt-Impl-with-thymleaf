@@ -4,15 +4,19 @@ import com.snort.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
+@Slf4j
 @Component
 public class JwtUtils {
 //    private String SECRET_KEY = "secret23erfdggbhcnjmkjnhsmkkgberbd6784536h2hdjdgdjdu";
@@ -95,7 +99,9 @@ public class JwtUtils {
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
+        log.info("validateToken method has called in JwtUtils");
         final String username = extractUsername(token);
+
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
@@ -109,6 +115,20 @@ public class JwtUtils {
 
     public String extractUsername(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public String getJwtFromCookies(HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        String jwt = null;
+        if(cookies != null) {
+            for (Cookie cookie : cookies){
+                if (cookie.getName().equals("jwt")){
+                    jwt = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        return  jwt;
     }
 
 }

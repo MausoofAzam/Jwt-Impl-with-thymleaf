@@ -33,35 +33,34 @@ public class SecurityConfigration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
-	
 
-	
-	/*
-	
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers(
-				 "/registration**",
-	                "/js/**",
-	                "/css/**",
-	                "/img/**").permitAll()
-		.anyRequest().authenticated()
-		.and()
-		.formLogin()
-		.loginPage("/login")
-		.permitAll()
-		.and()
-		.logout()
-		.invalidateHttpSession(true)
-		.clearAuthentication(true)
-		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-		.logoutSuccessUrl("/login?logout")
-		.permitAll();
-	}	*/
-	@Bean
-	public static BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+
+    /*
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers(
+                 "/registration**",
+                    "/js/**",
+                    "/css/**",
+                    "/img/**").permitAll()
+        .anyRequest().authenticated()
+        .and()
+        .formLogin()
+        .loginPage("/login")
+        .permitAll()
+        .and()
+        .logout()
+        .invalidateHttpSession(true)
+        .clearAuthentication(true)
+        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+        .logoutSuccessUrl("/login?logout")
+        .permitAll();
+    }	*/
+    @Bean
+    public static BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
 
   /*  @Override
@@ -109,15 +108,26 @@ public class SecurityConfigration extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/authenticate", "/login").permitAll()
+                .antMatchers("/authenticate",
+                        "/registration**",
+                        "/js/**",
+                        "/css/**",
+                        "/img/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
-                .exceptionHandling().authenticationEntryPoint(this.jwtAuthEntryPoint)
+                .formLogin()
+                .loginPage("/login")
+                .permitAll()
                 .and()
+                .logout()
+                .invalidateHttpSession(true)
+                .clearAuthentication(true).and()
+                .exceptionHandling().authenticationEntryPoint(this.jwtAuthEntryPoint)
+                .and().antMatcher("/index").authorizeRequests().and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.addFilterBefore(this.jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                http.addFilterBefore(this.jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
